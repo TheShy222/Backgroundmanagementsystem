@@ -1,0 +1,22 @@
+/* 初始化，正式环境使用初始化库 */
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Microsoft soft";
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+/* 清除 input 框自动填充时的默认背景色，清除 Chrome 自动填充的屎黄色 */
+input:-webkit-autofill {
+  -webkit-transition-delay: 99999s;
+  -webkit-transition: color 99999s ease-out, background-color 99999s ease-out;
+  -webkit-box-shadow: 0 0 0 1000px white inset;
+}
