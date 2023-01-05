@@ -14,8 +14,12 @@ const routes = [
         path: '/home',
         name: 'home',
         component: Home,
-        redirect: '/user', // 重定向到user路由
+        redirect: '/accountInfo', // 重定向到user路由
         children: [
+            {
+                path: '/accountInfo',
+                component: () => import('@/views/AccountInfo.vue'),
+            },
             {
                 path: '/user',
                 component: () => import('@/views/User.vue'),

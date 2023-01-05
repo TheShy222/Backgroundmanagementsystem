@@ -2,7 +2,7 @@
     <div id="d1">
         <form>
             <div class="login">
-                <h2>用户登录</h2>
+                <h2>后台管理系统</h2>
                 <div class="login_box">
                     <input type="text" name='name' id='name' required v-model="user.name">
                     <label for="name">用户名</label>

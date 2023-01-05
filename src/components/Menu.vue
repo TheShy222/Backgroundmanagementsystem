@@ -12,7 +12,7 @@
 export default {
     data () {
         return {
-            currentIndex:0,
+            currentIndex:null,
             menuList:[
                 {path:'/user',title:'用户管理'},
                 {path:'/product',title:'商品管理'},
@@ -41,14 +41,14 @@ export default {
 .listLeft {
     width: 100px;
     height: 500px;
-    margin-left: 40px;
     margin-top: 100px;
 }
 
 .listLeft li {
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
     margin-top: 50px;
-    color: white;
-    cursor: pointer;
     text-align: center;
 }
 .action{

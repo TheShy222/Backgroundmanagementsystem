@@ -1,8 +1,8 @@
-const loginAccount={
-  namespaced: true,
+const loginAccount = {
+    namespaced: true,
     // 内存中
     state: {
-      loginAccount: null,
+        loginAccount: null,
     },
     mutations: {
         SAVE(state, loginAccount) {
@@ -16,7 +16,7 @@ const loginAccount={
         },
     },
     getters: {
-      loginAccount: state => {
+        loginAccount: state => {
             if (state.loginAccount) {
                 return state.loginAccount
             } else {
