@@ -4,8 +4,12 @@ import axios from 'axios'
  * 创建axios实例
  *   封装baseURL
  */
+// const axiosInstance = axios.create({
+//     baseURL: 'http://10.7.163.142:8089', // 服务根地址
+//     timeout: 2000, // 超时时间
+// })
 const axiosInstance = axios.create({
-    baseURL: 'http://10.7.163.142:8089', // 服务根地址
+    baseURL: 'http://127.0.0.1:8090', // 服务根地址
     timeout: 2000, // 超时时间
 })
 

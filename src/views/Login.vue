@@ -29,15 +29,26 @@ export default {
     data() {
         return {
             user: {
-                name: 'root',
-                password: 'root'
+                name: '',
+                password: ''
             },
         }
     },
     methods: {
+        // async bindLogin() {
+        //     const res = await RequestLogin(this.user.name, this.user.password)
+        //     if (res.data.resultCode === 1) {
+        //         // 1. 保存登录状态
+        //         this.$store.dispatch('loginAccount/save', this.user)
+        //         // 2. 跳转主界面
+        //         this.$router.push({ path: '/home' })
+        //     } else {
+        //         alert("请登录并且确保账号密码正确！")
+        //     }
+        // },
         async bindLogin() {
             const res = await RequestLogin(this.user.name, this.user.password)
-            if (res.data.resultCode === 1) {
+            if (res.data.code===1) {
                 // 1. 保存登录状态
                 this.$store.dispatch('loginAccount/save', this.user)
                 // 2. 跳转主界面
@@ -45,7 +56,7 @@ export default {
             } else {
                 alert("请登录并且确保账号密码正确！")
             }
-        },
+        }
     },
 }
 </script>

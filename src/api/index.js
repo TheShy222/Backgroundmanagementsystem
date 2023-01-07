@@ -6,15 +6,26 @@ import axiosInstance from '@/utils/request.js'
  * @param {*} password 
  * @returns 
  */
+// export const RequestLogin = (username,password) => {
+//     return axiosInstance({
+//         method: 'post',
+//         url: '/api/login',
+//         //post请求参数使用data选项, get参数 params选项
+//         data: {
+//             username,
+//             password,
+//         },
+//     })
+// }
 export const RequestLogin = (username,password) => {
     return axiosInstance({
         method: 'post',
-        url: '/api/login',
+        url: '/login',
         //post请求参数使用data选项, get参数 params选项
-        data: {
+        data:{
             username,
-            password,
-        },
+            password
+        }
     })
 }
 /**
