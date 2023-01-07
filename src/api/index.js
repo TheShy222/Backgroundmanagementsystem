@@ -29,6 +29,15 @@ export const RequestLogin = (username,password) => {
     })
 }
 /**
+ * 用户接口
+ */
+export const RequestUser = () => {
+    return axiosInstance({
+        method: 'get',
+        url: '/loginInfo'
+    })
+}
+/**
  * 商品接口
  */
 export const RequestProduct = () => {

@@ -21,6 +21,10 @@ const routes = [
                 component: () => import('@/views/AccountInfo.vue'),
             },
             {
+                path: '/notWrite',
+                component: () => import('@/views/NotWrite.vue'),
+            },
+            {
                 path: '/user',
                 component: () => import('@/views/User.vue'),
             },

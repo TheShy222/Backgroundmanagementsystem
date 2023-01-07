@@ -3,9 +3,9 @@
         <img src="../assets/imgs/log.jpg" class="pic" />
         <h1>欢迎{{ name }}!</h1>
         <ul class="listTop">
-            <li><router-link to="/product">切换账号</router-link></li>
-            <li><router-link to="/product">消息</router-link></li>
-            <li @click="exit">退出</li>
+            <li><el-icon><Refresh /></el-icon><router-link to="/login">切换账号</router-link></li>
+            <li><el-icon><ChatDotRound /></el-icon><router-link to="/notWrite">消息</router-link></li>
+            <li @click="exit"><el-icon><Close /></el-icon>退出</li>
         </ul>
     </div>
 </template>

@@ -1,50 +1,32 @@
 <template>
-  <div class="info">
-      <div class="top">
-          <h2>个人信息</h2>
-      </div>
-      <div class="bot">
-          <h2>{{ accountName }}</h2>
-          <h2>{{ password }}</h2>
-      </div>
-  </div>
+  <el-table :data="list" style="width: 100%">
+    <el-table-column prop="name" label="姓名" width="500" />
+    <el-table-column prop="password" label="密码" width="500" />
+    <el-table-column fixed="right" label="操作" width="200">
+      <template #default>
+        <el-button link type="primary">编辑</el-button>
+        <el-button link type="primary">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script>
+import { RequestUser } from '@/api/index.js'
 export default {
-  computed: {
-      accountName(){
-          return this.$store.getters['loginAccount/loginAccount'].name
-      },
-      password(){
-          return this.$store.getters['loginAccount/loginAccount'].password
-      }
+  data() {
+    return {
+      list: []
+    }
+  },
+  mounted() {
+    RequestUser().then(res => {
+      this.list = res.data.list
+    })
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.info {
-  width: 800px;
-  height: 500px;
-  margin: 50px auto;
 
-  .top {
-      width: 100%;
-      height: 70px;
-      background-color: rgb(112, 112, 242);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      h2 {
-          font-size: 30px;
-      }
-  }
-  .bot {
-      width: 800px;
-      height: 500px;
-      background-color: rgb(154, 235, 154);
-
-  }
-}
 </style>

@@ -2,13 +2,13 @@
     <div id="d1">
         <form>
             <div class="login">
-                <h2>后台管理系统</h2>
+                <h2>商城后台管理系统</h2>
                 <div class="login_box">
-                    <input type="text" name='name' id='name' required v-model="user.name">
+                    <input type="text" name='name'  required v-model="user.name">
                     <label for="name">用户名</label>
                 </div>
                 <div class="login_box">
-                    <input type="password" name='pwd' id='pwd' required v-model="user.password">
+                    <input type="password" name='pwd'  required v-model="user.password">
                     <label for="pwd">密码</label>
                 </div>
                 <a href="#" @click="bindLogin">
@@ -75,7 +75,7 @@ form {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 500px;
+    width: 480px;
     height: 300px;
     background: linear-gradient(#141e30, #243b55);
 }
