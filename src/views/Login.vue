@@ -24,23 +24,25 @@
 </template>
 
 <script>
+import { RequestLogin } from '@/api/index.js'
 export default {
-    data () {
+    data() {
         return {
-            user:{
-                name:'',
-                password:''
+            user: {
+                name: 'root',
+                password: 'root'
             },
         }
     },
     methods: {
-        bindLogin() {
-            if(this.user.name === 'admin' && this.user.password === '123'){
+        async bindLogin() {
+            const res = await RequestLogin(this.user.name, this.user.password)
+            if (res.data.resultCode === 1) {
                 // 1. 保存登录状态
-                this.$store.dispatch('loginAccount/save',this.user)   
+                this.$store.dispatch('loginAccount/save', this.user)
                 // 2. 跳转主界面
                 this.$router.push({ path: '/home' })
-            }else{
+            } else {
                 alert("请登录并且确保账号密码正确！")
             }
         },

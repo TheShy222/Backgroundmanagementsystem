@@ -1,6 +1,6 @@
 <template>
     <div id="top">
-        <img src="../assets/imgs/logo.jpg" class="pic" />
+        <img src="../assets/imgs/log.jpg" class="pic" />
         <h1>欢迎{{ name }}!</h1>
         <ul class="listTop">
             <li><router-link to="/product">切换账号</router-link></li>
@@ -32,7 +32,11 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: hotpink;
+    background-color: #42B884;
+    .pic{
+        width: 199px;
+        height: 100px;
+    }
     h1{
         color: black;
     }

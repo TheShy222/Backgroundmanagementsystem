@@ -1,35 +1,29 @@
-# vue-router-project-03
+### 步骤
+1. 下载安装依赖
+   npm install element-plus --save
 
-This template should help get you started developing with Vue 3 in Vite.
+2. 自动按需导入组件
+   vite构建工具插件
+   npm install -D unplugin-vue-components unplugin-auto-import
 
-## Recommended IDE Setup
+3. vite.config.js
+    ```js
+      // vite.config.js
+        import { defineConfig } from 'vite'
+        import AutoImport from 'unplugin-auto-import/vite'
+        import Components from 'unplugin-vue-components/vite'
+        import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+        export default defineConfig({
+        // ...
+        plugins: [
+            // ...
+            AutoImport({
+            resolvers: [ElementPlusResolver()],
+            }),
+            Components({
+            resolvers: [ElementPlusResolver()],
+            }),
+        ],
+        })
+    ```

@@ -14,7 +14,7 @@ const routes = [
         path: '/home',
         name: 'home',
         component: Home,
-        redirect: '/accountInfo', // 重定向到user路由
+        redirect: '/accountInfo', // 重定向到accountInfo路由
         children: [
             {
                 path: '/accountInfo',

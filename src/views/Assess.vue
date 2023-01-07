@@ -1,11 +1,10 @@
 <template>
-  <div>
-      <h2>评价管理</h2>
-  </div>
+    <h2>评价管理</h2>
 </template>
 
 <script>
 export default {}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+</style>
