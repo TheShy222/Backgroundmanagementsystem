@@ -21,6 +21,10 @@ const routes = [
                 component: () => import('@/views/AccountInfo.vue'),
             },
             {
+                path: '/add',
+                component: () => import('@/views/Add.vue'),
+            },
+            {
                 path: '/notWrite',
                 component: () => import('@/views/NotWrite.vue'),
             },

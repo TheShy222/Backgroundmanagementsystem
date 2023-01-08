@@ -99,8 +99,7 @@ export default {}
   background-color:#545c64;
   .el-menu {
     width: 100%;
-    margin-top: 100px;
-    height: 600px;
+    height: 100%;
   }
 
   overflow-y: hidden;

@@ -38,6 +38,31 @@ export const RequestUser = () => {
     })
 }
 /**
+ * 添加用户接口
+ */
+export const RequestAdd = (username,password) => {
+    return axiosInstance({
+        method: 'post',
+        url: '/add',
+        data:{
+            username,
+            password
+        }
+    })
+}
+/**
+ * 删除用户接口
+ */
+export const RequestDele = (username) => {
+    return axiosInstance({
+        method: 'post',
+        url: '/dele',
+        data:{
+            username
+        }
+    })
+}
+/**
  * 商品接口
  */
 export const RequestProduct = () => {
