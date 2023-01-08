@@ -1,19 +1,19 @@
 <template>
   <h2>添加新会员</h2>
-  <button @click="show=true">确定</button>
-  <el-table :data="list" style="width: 100%">
+  <button @click="addShow=true">确定</button>
+  <el-table :data="list" style="width: 100%" class="el1">
     <el-table-column prop="name" label="姓名" width="300" />
     <el-table-column prop="password" label="密码" width="300" />
     <el-table-column  label="操作" width="200" #default="scope">
-        <el-button  type="primary">编辑</el-button>
+        <el-button  type="primary" @click="edit(scope.row)">编辑</el-button>
         <el-button  type="danger" @click="dele(scope.row)">删除</el-button>
     </el-table-column>
   </el-table>
-  <div class="box" v-if="show">
+  <div class="box" v-if="addShow">
         <div class="modal">
             <!-- header -->
             <div class="header">
-                <p class="title">个人信息</p>
+                <p class="title">新增会员</p>
                 <p class="close" @click="cancel">x</p>
             </div>
             <!-- 内容区域 -->
@@ -32,20 +32,46 @@
             </div>
         </div>
   </div>
+  <div class="box" v-if="editShow">
+        <div class="modal">
+            <!-- header -->
+            <div class="header">
+                <p class="title">修改会员</p>
+                <p class="close" @click="cancel">x</p>
+            </div>
+            <!-- 内容区域 -->
+            <div class="content">
+                <div>
+                    账号名:<input type="text" v-model="user.AccountName" /><br />
+                </div>
+                <div>
+                    密&emsp;码:<input type="password" v-model="user.Password" /><br />
+                </div>
+            </div>
+            <!-- 底部区域 -->
+            <div class="footer">
+                <button @click="bindEdit">确定</button>
+                <button @click="cancel">取消</button>
+            </div>
+        </div>
+  </div>
 </template>
 
 <script>
 import { RequestUser } from '@/api/index.js'
 import { RequestAdd } from '@/api/index.js'
 import { RequestDele } from '@/api/index.js'
+import { RequestEdit } from '@/api/index.js'
 export default {
   data() {
     return {
-      show:false,
+      addShow:false,
+      editShow:false,
       user:{
         AccountName:'',
         Password:''
       },
+      oldName:'',
       list: []
     }
   },
@@ -62,13 +88,27 @@ export default {
   methods:{
     bindConfirm(){
       RequestAdd(this.user.AccountName, this.user.Password)
-      this.show=false
+      this.user.AccountName=''
+      this.user.Password=''
+      this.addShow=false
     },
     cancel(){
-      this.show=false
+      this.addShow=false
+      this.editShow=false
     },
     dele(index){
       RequestDele(index.name)
+    },
+    edit(index){
+      this.oldName=index.name
+      console.log(this.oldName)
+      this.editShow=true
+    },
+    bindEdit(){
+      RequestEdit(this.user.AccountName, this.user.Password,this.oldName)
+      this.user.AccountName=''
+      this.user.Password=''
+      this.editShow=false
     }
   }
 }

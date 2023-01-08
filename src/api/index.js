@@ -63,6 +63,20 @@ export const RequestDele = (username) => {
     })
 }
 /**
+ * 修改用户接口
+ */
+export const RequestEdit = (username,password,oldName) => {
+    return axiosInstance({
+        method: 'post',
+        url: '/edit',
+        data:{
+            username,
+            password,
+            oldName
+        }
+    })
+}
+/**
  * 商品接口
  */
 export const RequestProduct = () => {
