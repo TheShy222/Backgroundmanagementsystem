@@ -56,24 +56,16 @@ export default {
         }
     },
     methods: {
-        // async bindLogin() {
-        //     const res = await RequestLogin(this.user.name, this.user.password)
-        //     if (res.data.resultCode === 1) {
-        //         // 1. 保存登录状态
-        //         this.$store.dispatch('loginAccount/save', this.user)
-        //         // 2. 跳转主界面
-        //         this.$router.push({ path: '/home' })
-        //     } else {
-        //         alert("请登录并且确保账号密码正确！")
-        //     }
-        // },
         bindLogin() {
-            const { name, password } = this.user
             const formRef = this.$refs.loginFormRef
             formRef.validate(async valid => {
-                const res = await RequestLogin(name, password)
+                const res = await RequestLogin(this.user.name, this.user.password)
                 if (valid) {
                     if (res.data.code === 1) {
+                        ElMessage({
+                            message: '登录成功!',
+                            type: 'success',
+                        })
                         // 1. 保存登录状态
                         this.$store.dispatch('loginAccount/save', this.user)
                         // 2. 跳转主界面

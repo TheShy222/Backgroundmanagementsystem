@@ -37,7 +37,7 @@
         <span>商品管理</span>
       </template>
       <el-menu-item index="2-2">
-        <router-link :to="{ path: '/product' }"><el-icon>
+        <router-link :to="{ path:'/product'}"><el-icon>
             <MilkTea />
           </el-icon>商品信息管理</router-link>
       </el-menu-item>

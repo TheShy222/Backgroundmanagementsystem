@@ -43,9 +43,9 @@
                 <!-- 面包屑导航 -->
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item :to="{path:'/user'}">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{path:'/accountInfo'}">用户管理</el-breadcrumb-item>
                     <el-breadcrumb-item :to="{path:'/product'}">商品管理</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{path:'/product'}">客服管理</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{path:'/product'}">库存管理</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{path:'/user'}">库存管理</el-breadcrumb-item>
                 </el-breadcrumb>
                 <!-- 子路由输出 -->
                 <router-view></router-view>
