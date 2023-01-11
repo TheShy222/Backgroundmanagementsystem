@@ -14,12 +14,19 @@
         <el-table-column prop="reserve" label="库存" />
         <el-table-column label="操作" #default="scope">
             <el-button type="primary" @click="edit(scope.row)">编辑</el-button>
-            <el-button type="danger" @click="bindDele(scope.row)">删除</el-button>
+            <el-popconfirm title="确认要删除此记录吗?" @confirm="bindDele(scope.row)">
+                <template #reference>
+                    <el-button type="danger">删除</el-button>
+                </template>
+            </el-popconfirm>
         </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination background layout="total,sizes,prev, pager, next, jumper" :total="total"
+        :page-sizes="[5, 10, 20]" @size-change="bindSizeChange" @current-change="bindCurrentChange"></el-pagination>
     <!-- 添加的弹框 -->
     <el-dialog title="添加商品" v-model="addShow" width="40%">
-        <el-form :model="user" :rules="rules" label-width="80px">
+        <el-form :model="goodsInfo" :rules="rules" label-width="80px">
             <el-form-item label="货号" prop="goodsId">
                 <el-input v-model="goodsInfo.goodsId"></el-input>
             </el-form-item>
@@ -28,19 +35,17 @@
             </el-form-item>
             <el-form-item label="品牌分类">
                 <el-select v-model="goodsInfo.brand" clearable placeholder="选择品牌种类">
-                    <el-option v-for="item in brandCategory" :key="item.id" :label="item.brandName" :value="item.brandName" />
+                    <el-option v-for="item in brandCategory" :key="item.id" :label="item.brandName"
+                        :value="item.brandName" />
                 </el-select>
             </el-form-item>
-            <!-- <el-form-item label="图片">
-                <el-upload list-type="picture-card" action="#" :auto-upload="true" :show-file-list="false"
-                    :before-upload="beforeAvatarUpload">
+            <el-form-item label="图片">
+                <!-- <el-upload list-type="picture-card" action="#" :auto-upload="true" show-file-list="false" :before-upload="beforeAvatarUpload">
                     <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                    <el-icon>
+                    <el-icon v-else>
                         <Plus />
                     </el-icon>
-                </el-upload>
-            </el-form-item> -->
-            <el-form-item label="图片" prop="picture">
+                </el-upload> -->
                 <el-input v-model="goodsInfo.picture"></el-input>
             </el-form-item>
             <el-form-item label="价格" prop="price">
@@ -58,23 +63,47 @@
         </el-form>
     </el-dialog>
     <!-- 编辑的弹框 -->
-    <!-- <el-dialog title="编辑商品" v-model="editShow" width="40%">
-        <el-form :model="user" ref="userFormRef" :rules="rules" label-width="80px">
-            <el-form-item label="账号名称" prop="AccountName">
-                <el-input v-model="user.AccountName"></el-input>
+    <el-dialog title="编辑商品" v-model="editShow" width="40%">
+        <el-form :model="goodsInfo" :rules="rules" label-width="80px">
+            <el-form-item label="货号" prop="goodsId">
+                <el-input v-model="goodsInfo.goodsId"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="Password">
-                <el-input v-model="user.Password"></el-input>
+            <el-form-item label="尺码" prop="size">
+                <el-input v-model="goodsInfo.size"></el-input>
+            </el-form-item>
+            <el-form-item label="品牌分类">
+                <el-select v-model="goodsInfo.brand" clearable placeholder="选择品牌种类">
+                    <el-option v-for="item in brandCategory" :key="item.id" :label="item.brandName"
+                        :value="item.brandName" />
+                </el-select>
+            </el-form-item>
+            <el-form-item label="图片">
+                <!-- <el-upload list-type="picture-card" action="#" :auto-upload="true" show-file-list="false" :before-upload="beforeAvatarUpload">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                    <el-icon v-else>
+                        <Plus />
+                    </el-icon>
+                </el-upload> -->
+                <el-input v-model="goodsInfo.picture"></el-input>
+            </el-form-item>
+            <el-form-item label="价格" prop="price">
+                <el-input v-model="goodsInfo.price"></el-input>
+            </el-form-item>
+            <el-form-item label="详情" prop="detail">
+                <el-input v-model="goodsInfo.detail"></el-input>
+            </el-form-item>
+            <el-form-item label="库存" prop="reserve">
+                <el-input v-model="goodsInfo.reserve"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="bindEdit">确定</el-button>
             </el-form-item>
         </el-form>
-    </el-dialog> -->
+    </el-dialog>
 </template>
 
 <script>
-import { RequestCategoryList, RequestGoodsInfo, RequestAddGoods,RequestDeleGoods } from '@/api/index.js'
+import { RequestCategoryList, RequestGoodsInfo, RequestAddGoods, RequestDeleGoods,RequestEditGoods} from '@/api/index.js'
 export default {
     data() {
         return {
@@ -91,21 +120,27 @@ export default {
             },
             list: [],
             brandCategory: [],
-            imageUrl: '', //图片预览地址
-            imageFile: null //上传图片文件
+            // imageUrl: '', //图片预览地址
+            // imageFile: null //上传图片文件
+            total:0, // 总记录条数
+            pageSize:5, // 每页记录条数
+            pageNo:1, // 当前页号
+            id:''
         }
     },
     mounted() {
-        RequestGoodsInfo().then(res => {
+        RequestGoodsInfo(this.pageSize,this.pageNo).then(res => {
             this.list = res.data.list
+            this.total=res.data.total
         }),
             RequestCategoryList().then(res => {
                 this.brandCategory = res.data.list
             })
     },
     updated() {
-        RequestGoodsInfo().then(res => {
+        RequestGoodsInfo(this.pageSize,this.pageNo).then(res => {
             this.list = res.data.list
+            this.total=res.data.total
         }),
             RequestCategoryList().then(res => {
                 this.brandCategory = res.data.list
@@ -113,30 +148,40 @@ export default {
     },
     methods: {
         bindAdd() {
+            // const formData = new FormData()
+            // formData.append('goodsId',this.goodsInfo.goodsId)
+            // formData.append('size',this.goodsInfo.size)
+            // formData.append('brand',this.goodsInfo.brand)
+            // formData.append('picture', this.imageFile)
+            // formData.append('price', this.goodsInfo.price)
+            // formData.append('detail', this.goodsInfo.detail)
+            // formData.append('reserve', this.goodsInfo.reserve)
             RequestAddGoods(this.goodsInfo)
-                ElMessage({
-                    message: '添加商品成功!',
-                    type: 'success',
-                })
+            ElMessage({
+                message: '添加商品成功!',
+                type: 'success',
+            })
             this.addShow = false
         },
         bindDele(index) {
             RequestDeleGoods(index.goodsId)
             ElMessage({
-                    message: '删除商品成功!',
-                    type: 'success',
-                })
+                message: '删除商品成功!',
+                type: 'success',
+            })
         },
-        // edit(index) {
-        //     this.oldName = index.name
-        //     this.editShow = true
-        // },
-        // bindEdit() {
-        //     RequestEdit(this.user.AccountName, this.user.Password, this.oldName)
-        //     this.user.AccountName = ''
-        //     this.user.Password = ''
-        //     this.editShow = false
-        // },
+        edit(index) {
+            this.id = index.goodsId
+            this.editShow = true
+        },
+        bindEdit() {
+            RequestEditGoods(this.goodsInfo, this.id)
+            ElMessage({
+                message: '编辑商品成功!',
+                type: 'success',
+            })
+            this.editShow = false
+        },
         beforeAvatarUpload(rawFile) {
             const arr = ['image/jpeg', 'image/png', 'image/jpg']
             // 图片格式验证
@@ -165,6 +210,18 @@ export default {
             this.imageFile = rawFile
             return false // 不向下执行
         },
+         /**
+         * 页大小改变事件
+         */
+         bindSizeChange(value) {
+            this.pageSize = value
+        },
+        /**
+         * 页号改变事件
+         */
+         bindCurrentChange(value){
+            this.pageNo = value
+         }
     }
 }
 </script>

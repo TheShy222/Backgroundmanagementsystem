@@ -6,12 +6,12 @@ import axiosInstance from '@/utils/request.js'
  * @param {*} password 
  * @returns 
  */
-export const RequestLogin = (username,password) => {
+export const RequestLogin = (username, password) => {
     return axiosInstance({
         method: 'post',
         url: '/login',
         //post请求参数使用data选项, get参数 params选项
-        data:{
+        data: {
             username,
             password
         }
@@ -29,11 +29,11 @@ export const RequestUser = () => {
 /**
  * 添加用户接口
  */
-export const RequestAdd = (username,password) => {
+export const RequestAdd = (username, password) => {
     return axiosInstance({
         method: 'post',
         url: '/add',
-        data:{
+        data: {
             username,
             password
         }
@@ -46,7 +46,7 @@ export const RequestDele = (username) => {
     return axiosInstance({
         method: 'post',
         url: '/dele',
-        data:{
+        data: {
             username
         }
     })
@@ -54,11 +54,11 @@ export const RequestDele = (username) => {
 /**
  * 修改用户接口
  */
-export const RequestEdit = (username,password,oldName) => {
+export const RequestEdit = (username, password, oldName) => {
     return axiosInstance({
         method: 'post',
         url: '/edit',
-        data:{
+        data: {
             username,
             password,
             oldName
@@ -68,10 +68,14 @@ export const RequestEdit = (username,password,oldName) => {
 /**
  * 商品信息接口
  */
-export const RequestGoodsInfo = () => {
+export const RequestGoodsInfo = (pageSize,pageNo) => {
     return axiosInstance({
         method: 'get',
-        url: '/goodsInfo'
+        url: '/goodsInfo',
+        params:{
+            pageSize,
+            pageNo
+        }
     })
 }
 /**
@@ -90,7 +94,7 @@ export const RequestAddGoods = (formdata) => {
     return axiosInstance({
         method: 'post',
         url: '/addGoods',
-        data:{
+        data: {
             formdata
         }
     })
@@ -102,7 +106,20 @@ export const RequestDeleGoods = (goodsId) => {
     return axiosInstance({
         method: 'post',
         url: '/deleGoods',
-        data:{
+        data: {
+            goodsId
+        }
+    })
+}
+/**
+ * 商品编辑接口
+ */
+export const RequestEditGoods = (formdata,goodsId) => {
+    return axiosInstance({
+        method: 'post',
+        url: '/editGoods',
+        data: {
+            formdata,
             goodsId
         }
     })
