@@ -61,7 +61,7 @@ export default {
             formRef.validate(async valid => {
                 const res = await RequestLogin(this.user.name, this.user.password)
                 if (valid) {
-                    if (res.data.code === 1) {
+                    if (res.data.code == 1) {
                         ElMessage({
                             message: '登录成功!',
                             type: 'success',

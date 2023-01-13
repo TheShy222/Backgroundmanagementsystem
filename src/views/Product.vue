@@ -1,29 +1,42 @@
 <template>
-    <h2>商品详情</h2>
-    <el-button type="success" @click="addShow = true">添加</el-button>
-    <el-table :data="list" style="width: 100%">
-        <el-table-column prop="goodsId" label="货号" />
-        <el-table-column prop="size" label="尺码" />
-        <el-table-column prop="brand" label="品牌" />
-        <el-table-column label="图片" #default="scope">
-            <el-image :src="scope.row.picture" style="width: 100px; height: 100px">
-            </el-image>
-        </el-table-column>
-        <el-table-column prop="price" label="价格" />
-        <el-table-column prop="detail" label="详情" />
-        <el-table-column prop="reserve" label="库存" />
-        <el-table-column label="操作" #default="scope">
-            <el-button type="primary" @click="edit(scope.row)">编辑</el-button>
-            <el-popconfirm title="确认要删除此记录吗?" @confirm="bindDele(scope.row)">
-                <template #reference>
-                    <el-button type="danger">删除</el-button>
-                </template>
-            </el-popconfirm>
-        </el-table-column>
-    </el-table>
+    <!-- 搜索 -->
+    <el-row :gutter="20" style="margin-bottom: 10px">
+        <el-col :span="8">
+            <el-button type="success" @click="addShow = true">添加</el-button>
+            <el-button type="warning" @click="bindRefresh">刷新</el-button>
+            <el-button type="primary" @click="bindBatchDelete">批量删除</el-button>
+        </el-col>
+        <el-col :span="8">
+            <el-input v-model="searchId" placeholder="货号搜索" clearable></el-input>
+        </el-col>
+        <el-col :span="8">
+            <el-button type="warning" @click="bindSearch">搜索产品</el-button>
+        </el-col>
+    </el-row>
+    <el-table :data="list" style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table-column type="selection" width="55" />
+    <el-table-column prop="goodsId" label="货号" />
+    <el-table-column prop="size" label="尺码" />
+    <el-table-column prop="brand" label="品牌" />
+    <el-table-column label="图片" #default="scope">
+      <el-image :src="scope.row.picture" style="width: 100px; height: 100px">
+      </el-image>
+    </el-table-column>
+    <el-table-column prop="price" label="价格" />
+    <el-table-column prop="detail" label="详情" />
+    <el-table-column prop="reserve" label="库存" />
+    <el-table-column label="操作" #default="scope">
+      <el-button type="primary" @click="edit(scope.row)">编辑</el-button>
+      <el-popconfirm title="确认要删除此记录吗?" @confirm="bindDele(scope.row)">
+        <template #reference>
+          <el-button type="danger">删除</el-button>
+        </template>
+      </el-popconfirm>
+    </el-table-column>
+  </el-table>
     <!-- 分页 -->
-    <el-pagination background layout="total,sizes,prev, pager, next, jumper" :total="total"
-        :page-sizes="[5, 10, 20]" @size-change="bindSizeChange" @current-change="bindCurrentChange"></el-pagination>
+    <el-pagination background layout="total,sizes,prev, pager, next, jumper" :total="total" :page-sizes="[5, 10, 15]"
+        @size-change="bindSizeChange" @current-change="bindCurrentChange"></el-pagination>
     <!-- 添加的弹框 -->
     <el-dialog title="添加商品" v-model="addShow" width="40%">
         <el-form :model="goodsInfo" :rules="rules" label-width="80px">
@@ -103,7 +116,14 @@
 </template>
 
 <script>
-import { RequestCategoryList, RequestGoodsInfo, RequestAddGoods, RequestDeleGoods,RequestEditGoods} from '@/api/index.js'
+import {
+    RequestCategoryList,
+    RequestGoodsInfo,
+    RequestAddGoods,
+    RequestDeleGoods,
+    RequestEditGoods,
+    RequestBatchDelete
+} from '@/api/index.js'
 export default {
     data() {
         return {
@@ -122,32 +142,19 @@ export default {
             brandCategory: [],
             // imageUrl: '', //图片预览地址
             // imageFile: null //上传图片文件
-            total:0, // 总记录条数
-            pageSize:5, // 每页记录条数
-            pageNo:1, // 当前页号
-            id:''
+            total: '', // 总记录条数
+            pageSize: '10', // 每页记录条数
+            pageNo: '1', // 当前页号
+            id: '',
+            ids: '', // 删除商品id 集合
+            searchId: '',
         }
     },
-    mounted() {
-        RequestGoodsInfo(this.pageSize,this.pageNo).then(res => {
-            this.list = res.data.list
-            this.total=res.data.total
-        }),
-            RequestCategoryList().then(res => {
-                this.brandCategory = res.data.list
-            })
-    },
-    updated() {
-        RequestGoodsInfo(this.pageSize,this.pageNo).then(res => {
-            this.list = res.data.list
-            this.total=res.data.total
-        }),
-            RequestCategoryList().then(res => {
-                this.brandCategory = res.data.list
-            })
+    created() {
+        this.getGoodsList()
     },
     methods: {
-        bindAdd() {
+        async bindAdd() {
             // const formData = new FormData()
             // formData.append('goodsId',this.goodsInfo.goodsId)
             // formData.append('size',this.goodsInfo.size)
@@ -156,30 +163,52 @@ export default {
             // formData.append('price', this.goodsInfo.price)
             // formData.append('detail', this.goodsInfo.detail)
             // formData.append('reserve', this.goodsInfo.reserve)
-            RequestAddGoods(this.goodsInfo)
-            ElMessage({
-                message: '添加商品成功!',
-                type: 'success',
-            })
+            const res = await RequestAddGoods(this.goodsInfo)
+            if (res.data.code == 1) {
+                ElMessage({
+                    message: '添加商品成功!',
+                    type: 'success',
+                })
+                this.getGoodsList()
+            }
+            this.goodsInfo = {}
             this.addShow = false
         },
-        bindDele(index) {
-            RequestDeleGoods(index.goodsId)
-            ElMessage({
-                message: '删除商品成功!',
-                type: 'success',
+        async getGoodsList() {
+            const res = await RequestGoodsInfo(this.pageSize, this.pageNo, this.searchId)
+            if (res.data.code == 1) {
+                this.list = res.data.list
+                this.total = res.data.total
+            }
+            RequestCategoryList().then(res => {
+                this.brandCategory = res.data.list
             })
+        },
+        async bindDele(index) {
+            const res = await RequestDeleGoods(index.goodsId)
+            if (res.data.code == 1) {
+                ElMessage({
+                    message: '删除商品成功!',
+                    type: 'success',
+                })
+                this.getGoodsList()
+            }
         },
         edit(index) {
             this.id = index.goodsId
+            this.goodsInfo = index
             this.editShow = true
         },
-        bindEdit() {
-            RequestEditGoods(this.goodsInfo, this.id)
-            ElMessage({
-                message: '编辑商品成功!',
-                type: 'success',
-            })
+        async bindEdit() {
+            const res = await RequestEditGoods(this.goodsInfo, this.id)
+            if (res.data.code == 1) {
+                ElMessage({
+                    message: '编辑商品成功!',
+                    type: 'success',
+                })
+            }
+            this.goodsInfo = {}
+            this.getGoodsList()
             this.editShow = false
         },
         beforeAvatarUpload(rawFile) {
@@ -210,18 +239,59 @@ export default {
             this.imageFile = rawFile
             return false // 不向下执行
         },
-         /**
-         * 页大小改变事件
-         */
-         bindSizeChange(value) {
+        /**
+        * 页大小改变事件
+        */
+        bindSizeChange(value) {
             this.pageSize = value
+            this.getGoodsList()
         },
         /**
          * 页号改变事件
          */
-         bindCurrentChange(value){
+        bindCurrentChange(value) {
             this.pageNo = value
-         }
+            this.getGoodsList()
+        },
+        /**
+        * 搜索产品
+        */
+        async bindSearch() {
+            this.getGoodsList()
+        },
+        /**
+        * 多选
+        */
+        handleSelectionChange(value) { // [{id:10,name:''}] => [10,12,34] => '10,12,34'
+            const list = value.map(item => item.reserve)
+            const ids = list.join(',')
+            this.ids = ids
+        },
+        /**
+         * 批量删除
+         */
+        async bindBatchDelete() {
+            // if (this.ids?.split(',').length == 0) {
+            //     ElMessage({
+            //         type: 'info',
+            //         message: '请选择删除产品',
+            //     })
+            //     return
+            // }
+            const res = await RequestBatchDelete(this.ids)
+            console.log(this.ids)
+            console.log(res)
+            if (res.data.code == 1) {
+                ElMessage({
+                    type: 'success',
+                    message: '批量删除成功',
+                })
+                this.getGoodsList()
+            }
+        },
+        bindRefresh() {
+            this.getGoodsList()
+        },
     }
 }
 </script>

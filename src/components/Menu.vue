@@ -5,24 +5,27 @@
         <el-icon>
           <location />
         </el-icon>
-        <span>用户管理</span>
+        <span>人员管理</span>
       </template>
-      <el-menu-item index="/user">
+      <el-menu-item index="1-1">
         <el-icon>
           <UserFilled />
-        </el-icon><router-link :to="{ path: '/user' }">信息管理</router-link>
+        </el-icon><router-link :to="{ path: '/user' }">用户列表</router-link>
       </el-menu-item>
-      <el-menu-item index="1-2"><el-icon>
+      <el-menu-item index="1-2">
+        <el-icon>
           <WarnTriangleFilled />
-        </el-icon>限制管理</el-menu-item>
+        </el-icon>
+        <router-link :to="{ path: '/accountInfo' }">管理员列表</router-link>
+      </el-menu-item>
       <el-sub-menu index="1-3">
-        <template #title><el-icon>
+        <template #title>
+          <el-icon>
             <Menu />
           </el-icon>分组管理</template>
-        <el-menu-item index="1-3-1">
-          <router-link :to="{ path: '/accountInfo' }"><el-icon>
-              <Avatar />
-            </el-icon>会员管理</router-link>
+        <el-menu-item index="1-3-1"><el-icon>
+            <Avatar />
+          </el-icon>会员管理
         </el-menu-item>
         <el-menu-item index="1-3-2"><el-icon>
             <Notification />
@@ -36,10 +39,10 @@
         </el-icon>
         <span>商品管理</span>
       </template>
-      <el-menu-item index="2-2">
-        <router-link :to="{ path:'/product'}"><el-icon>
+      <el-menu-item index="2-1">
+        <router-link :to="{ path: '/product' }"><el-icon>
             <MilkTea />
-          </el-icon>商品信息管理</router-link>
+          </el-icon>商品信息</router-link>
       </el-menu-item>
       <el-menu-item index="2-2"><el-icon>
           <FolderAdd />

@@ -15,18 +15,12 @@
 </template>
 
 <script>
-import { RequestProduct } from '@/api/index.js'
 export default {
   data() {
     return {
       list: []
     }
   },
-  mounted() {
-    RequestProduct().then(res => {
-      this.list = res.data.resultInfo.list
-    })
-  }
 }
 </script>
 

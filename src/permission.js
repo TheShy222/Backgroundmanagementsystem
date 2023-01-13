@@ -26,7 +26,10 @@ router.beforeEach((to, from) => {
         return true // 放行
     } else {
         // 如果不存在， 更优雅，重定向到登录界面
-        confirm("你没有权限访问其他页面！")
+        ElMessage({
+            message: '你没有权限访问!',
+            type: 'error',
+        })
         router.replace({ path: '/login' })
     }
 })

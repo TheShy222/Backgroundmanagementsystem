@@ -68,13 +68,14 @@ export const RequestEdit = (username, password, oldName) => {
 /**
  * 商品信息接口
  */
-export const RequestGoodsInfo = (pageSize,pageNo) => {
+export const RequestGoodsInfo = (pageSize,pageNo,searchId) => {
     return axiosInstance({
         method: 'get',
         url: '/goodsInfo',
         params:{
             pageSize,
-            pageNo
+            pageNo,
+            searchId,
         }
     })
 }
@@ -121,6 +122,19 @@ export const RequestEditGoods = (formdata,goodsId) => {
         data: {
             formdata,
             goodsId
+        }
+    })
+}
+/**
+ * 批量删除
+ *  ids: 商品id '1,2,3,4'
+ */
+export const RequestBatchDelete = (ids)=>{
+    return axiosInstance({
+        method:'get',
+        url:'/bachDeleteGoods',
+        params:{
+            ids
         }
     })
 }

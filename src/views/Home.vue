@@ -41,12 +41,8 @@
             <!-- 内容区域 -->
             <el-main>
                 <!-- 面包屑导航 -->
-                <el-breadcrumb separator-class="el-icon-arrow-right">
-                    <el-breadcrumb-item :to="{path:'/user'}">首页</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{path:'/accountInfo'}">用户管理</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{path:'/product'}">商品管理</el-breadcrumb-item>
-                    <el-breadcrumb-item :to="{path:'/user'}">库存管理</el-breadcrumb-item>
-                </el-breadcrumb>
+                <BreadCrumb></BreadCrumb>
+
                 <!-- 子路由输出 -->
                 <router-view></router-view>
             </el-main>
@@ -55,6 +51,7 @@
 </template>
 
 <script>
+import BreadCrumb from '@/components/BreadCrumb.vue'
 import Menu from '@/components/Menu.vue'
 import { Fold, Expand } from '@element-plus/icons-vue'
 export default {
@@ -62,6 +59,7 @@ export default {
         Menu,
         Fold,
         Expand,
+        BreadCrumb
     },
     data() {
         return {
@@ -83,6 +81,7 @@ export default {
             this.componentName = this.isCollapse ? Fold : Expand
         },
         bindExit() {
+            localStorage.removeItem('loginAccount')
             this.$router.replace({ path: '/login' })
         },
         bindLogin() {

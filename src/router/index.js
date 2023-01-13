@@ -1,36 +1,70 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+import Index from '../views/Index.vue'
 const routes = [
     {
-        path:'/',
-        redirect:'/login'
+        path: '/',
+        redirect: '/login'
     },
     {
         path: '/login',
         component: Login,
     },
+    //首页
     {
         path: '/home',
-        name: 'home',
         component: Home,
-        redirect: '/accountInfo', // 重定向到accountInfo路由
+        redirect: '/index', // 重定向到index路由
         children: [
             {
-                path: '/accountInfo',
-                component: () => import('@/views/AccountInfo.vue'),
+                path: '/index',
+                component: Index,
+                meta: { hidden: false },
             },
-            {
-                path: '/notWrite',
-                component: () => import('@/views/NotWrite.vue'),
-            },
+        ],
+    },
+    //人员管理模块
+    {
+        path: '/home1',
+        meta: { title: '人员管理' },
+        component: Home,
+        children: [
             {
                 path: '/user',
                 component: () => import('@/views/User.vue'),
+                meta: { hidden: true, title: '用户列表' },
             },
+            {
+                path: '/accountInfo',
+                component: () => import('@/views/AccountInfo.vue'),
+                meta: { hidden: true, title: '管理员列表' },
+            }, 
+        ],
+    },
+    //商品管理模块
+    {
+        path: '/home2',
+        meta: { title: '商品管理' },
+        component: Home,
+        children: [
             {
                 path: '/product',
                 component: () => import('@/views/Product.vue'),
+                meta: { hidden: true, title: '商品信息' },
+            },
+
+        ],
+    },
+    //未分类模块
+    {
+        path: '/home3',
+        meta: { title: '随机管理' },
+        component: Home,
+        children: [
+            {
+                path: '/notWrite',
+                component: () => import('@/views/NotWrite.vue'),
             },
             {
                 path: '/alter',
@@ -39,7 +73,7 @@ const routes = [
             {
                 path: '/customer',
                 component: () => import('@/views/Customer.vue')
-            },  
+            },
             {
                 path: '/reserve',
                 component: () => import('@/views/Reserve.vue')
@@ -56,8 +90,8 @@ const routes = [
     },
     // 404路由不存在匹配，放在路由最下面
     {
-        path:'/:pathMatch(.*)*',
-        component:()=>import('@/views/NotPage.vue')
+        path: '/:pathMatch(.*)*',
+        component: () => import('@/views/NotPage.vue')
     }
 ]
 const router = createRouter({
