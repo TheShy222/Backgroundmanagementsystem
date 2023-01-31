@@ -33,10 +33,11 @@
         </template>
       </el-popconfirm>
     </el-table-column>
-  </el-table>
+    </el-table>
     <!-- 分页 -->
     <el-pagination background layout="total,sizes,prev, pager, next, jumper" :total="total" :page-sizes="[5, 10, 15]"
-        @size-change="bindSizeChange" @current-change="bindCurrentChange"></el-pagination>
+        @size-change="bindSizeChange" @current-change="bindCurrentChange">
+    </el-pagination>
     <!-- 添加的弹框 -->
     <el-dialog title="添加商品" v-model="addShow" width="40%">
         <el-form :model="goodsInfo" :rules="rules" label-width="80px">
